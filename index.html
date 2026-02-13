@@ -24,6 +24,12 @@
             box-sizing: border-box;
         }
 
+        /* Bloqueio definitivo do eixo horizontal no mobile */
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-color);
@@ -32,7 +38,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-x: hidden;
             position: relative;
         }
 
@@ -132,7 +137,7 @@
             z-index: 2;
         }
 
-        /* --- Botões Redondos (Efeito Hover Atualizado) --- */
+        /* --- Botões Redondos --- */
         .social-buttons-container {
             display: flex;
             gap: 25px;
@@ -167,7 +172,6 @@
         .social-btn:hover {
             transform: scale(1.15) translateY(-5px);
             box-shadow: var(--glow-shadow);
-            /* Utiliza a cor de fundo do site para preencher o interior e o gradiente para a borda */
             background-image: linear-gradient(var(--bg-color), var(--bg-color)), var(--main-gradient);
             border: 2px solid transparent;
         }
@@ -176,6 +180,38 @@
             -webkit-text-fill-color: #ffffff;
             background: none;
         }
+
+        /* --- Setas Indicadoras (PC: Fixas no centro inferior) --- */
+        .scroll-indicator-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .scroll-arrow {
+            font-size: 2rem;
+            background: var(--main-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 5px rgba(0, 242, 255, 0.5));
+            opacity: 0;
+            line-height: 0.8;
+        }
+
+        @keyframes scrollDown {
+            0% { opacity: 0; transform: translateY(-10px); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(10px); }
+        }
+
+        .arrow-top { animation: scrollDown 2s infinite ease-in-out; }
+        .arrow-bottom { animation: scrollDown 2s infinite ease-in-out 0.3s; }
 
         /* --- Coluna da Direita (CARROSSEL 3D) --- */
         .content-right {
@@ -224,39 +260,6 @@
         .carousel-item:nth-child(4) { animation-delay: -9s; }
         .carousel-item:nth-child(5) { animation-delay: -12s; }
 
-
-        /* --- Setas Indicadoras --- */
-        .scroll-indicator-container {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 100;
-            pointer-events: none;
-        }
-
-        .scroll-arrow {
-            font-size: 2rem;
-            background: var(--main-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 5px rgba(0, 242, 255, 0.5));
-            opacity: 0;
-            line-height: 0.8;
-        }
-
-        @keyframes scrollDown {
-            0% { opacity: 0; transform: translateY(-10px); }
-            50% { opacity: 1; }
-            100% { opacity: 0; transform: translateY(10px); }
-        }
-
-        .arrow-top { animation: scrollDown 2s infinite ease-in-out; }
-        .arrow-bottom { animation: scrollDown 2s infinite ease-in-out 0.3s; }
-
         /* --- Responsividade --- */
         @media (max-width: 900px) {
             .bg-deco-circle {
@@ -274,6 +277,17 @@
             }
             .title { font-size: 2.2rem; }
             .slideshow-frame { width: 300px; height: 450px; }
+            
+            /* Ajuste das setas no celular: retira a posição fixa e as coloca abaixo do Discord */
+            .scroll-indicator-container {
+                position: relative;
+                bottom: auto;
+                left: auto;
+                transform: none;
+                width: 260px;
+                margin-top: 40px;
+            }
+
             @keyframes carousel3DMove {
                 0%, 15% { opacity: 1; transform: translate(-50%, -50%) translateX(0) translateZ(0) scale(1); z-index: 10; }
                 20%, 35% { opacity: 0.4; transform: translate(-50%, -50%) translateX(-50%) translateZ(-100px) scale(0.8); z-index: 5; }
@@ -316,6 +330,11 @@
                     <i class="fab fa-telegram-plane"></i>
                 </a>
             </div>
+
+            <div class="scroll-indicator-container">
+                <i class="fas fa-chevron-down scroll-arrow arrow-top"></i>
+                <i class="fas fa-chevron-down scroll-arrow arrow-bottom"></i>
+            </div>
         </div>
 
         <div class="content-right">
@@ -329,11 +348,6 @@
         </div>
 
     </main>
-
-    <div class="scroll-indicator-container">
-        <i class="fas fa-chevron-down scroll-arrow arrow-top"></i>
-        <i class="fas fa-chevron-down scroll-arrow arrow-bottom"></i>
-    </div>
 
 </body>
 </html>
