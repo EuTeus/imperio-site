@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Império Promoções</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         /* --- Configurações Globais e Cores --- */
@@ -24,20 +24,18 @@
             box-sizing: border-box;
         }
 
-        /* Bloqueio definitivo do eixo horizontal no mobile */
-        html, body {
+        /* Configuração de Scroll Snap e Eixo Horizontal */
+        html {
             overflow-x: hidden;
             width: 100%;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             position: relative;
         }
 
@@ -56,13 +54,21 @@
 
         /* --- Barra de Navegação --- */
         .navbar {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
             justify-content: center;
             gap: 30px;
-            padding: 25px 0;
+            padding: 25px 30px;
             width: 100%;
             max-width: 600px;
-            z-index: 10;
+            z-index: 999;
+            background: rgba(10, 10, 18, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
         }
 
         .nav-link {
@@ -87,10 +93,22 @@
             transition: width 0.3s ease;
         }
 
-        .nav-link:hover { color: var(--text-color); }
-        .nav-link:hover::after { width: 100%; }
+        .nav-link:hover, .nav-link.active { color: var(--text-color); }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
 
-        /* --- Container Principal --- */
+        /* --- Secções de Rolagem (Scroll Snap) --- */
+        .scroll-section {
+            width: 100%;
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 50px; 
+            position: relative;
+        }
+
+        /* --- Container Principal (Início) --- */
         .main-container {
             display: flex;
             flex-direction: row;
@@ -98,10 +116,7 @@
             justify-content: space-between;
             width: 90%;
             max-width: 1100px;
-            margin-top: 40px;
-            padding: 20px;
             gap: 40px;
-            padding-bottom: 100px;
             position: relative;
             z-index: 1;
         }
@@ -154,12 +169,9 @@
             align-items: center;
             text-decoration: none;
             background: rgba(255, 255, 255, 0.05);
-            border: 2px solid transparent;
             position: relative;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-size: 1.8rem;
-            background-clip: padding-box, border-box;
-            background-origin: padding-box, border-box;
         }
 
         .social-btn i {
@@ -173,7 +185,6 @@
             transform: scale(1.15) translateY(-5px);
             box-shadow: var(--glow-shadow);
             background-image: linear-gradient(var(--bg-color), var(--bg-color)), var(--main-gradient);
-            border: 2px solid transparent;
         }
 
         .social-btn:hover i {
@@ -181,7 +192,7 @@
             background: none;
         }
 
-        /* --- Setas Indicadoras (PC: Fixas no centro inferior) --- */
+        /* --- Setas Indicadoras --- */
         .scroll-indicator-container {
             position: fixed;
             bottom: 30px;
@@ -244,7 +255,6 @@
             opacity: 0; 
         }
 
-        /* Animação do Carrossel 3D */
         @keyframes carousel3DMove {
             0%, 15% { opacity: 1; transform: translate(-50%, -50%) translateX(0) translateZ(0) scale(1); z-index: 10; filter: brightness(1.05); }
             20%, 35% { opacity: 0.6; transform: translate(-50%, -50%) translateX(-65%) translateZ(-120px) scale(0.85); z-index: 5; filter: brightness(0.5); }
@@ -259,6 +269,276 @@
         .carousel-item:nth-child(3) { animation-delay: -6s; }
         .carousel-item:nth-child(4) { animation-delay: -9s; }
         .carousel-item:nth-child(5) { animation-delay: -12s; }
+
+        /* --- Secção APP --- */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 900px;
+            padding: 20px;
+            text-align: center;
+            opacity: 0; 
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .app-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .app-title {
+            font-size: 4.5rem;
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            margin-bottom: 20px;
+            background: var(--main-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+        }
+
+        .app-description {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 50px;
+        }
+
+        .gifs-wrapper {
+            display: flex;
+            gap: 50px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .gif-box {
+            width: 320px;
+            height: auto;
+            border-radius: 40px;
+            border: 4px solid var(--accent-cyan);
+            background-color: rgba(255, 255, 255, 0.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: var(--glow-shadow);
+        }
+
+        .gif-box img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* --- Botões de Download (APP) --- */
+        .download-buttons-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .download-btn i {
+            font-size: 2rem;
+        }
+
+        .btn-android {
+            background: #00ff88;
+            color: #0a0a12;
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.5);
+            border: 2px solid transparent;
+        }
+
+        .btn-android:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.8);
+            background: #33ff99;
+        }
+
+        .btn-ios.disabled {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* --- Secção Suporte --- */
+        .support-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .support-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .support-image-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 30px;
+            -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+        }
+
+        .support-image-wrapper img {
+            width: 100%;
+            display: block;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .support-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: var(--main-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #suporte .app-description {
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-discord {
+            background: #5865F2;
+            color: #ffffff;
+            box-shadow: 0 0 25px rgba(88, 101, 242, 0.5);
+            border: 2px solid transparent;
+            margin-top: 30px;
+        }
+
+        .btn-discord:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 0 50px rgba(88, 101, 242, 0.8);
+            background: #7983f5;
+        }
+
+        /* --- Secção Apoie --- */
+        .apoie-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 900px;
+            padding: 20px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .apoie-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .apoie-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: var(--main-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .qr-code-box {
+            width: 300px; 
+            height: 303px; 
+            border-radius: 30px;
+            border: 4px solid var(--accent-cyan);
+            background-color: #ffffff; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            box-shadow: var(--glow-shadow);
+            overflow: hidden;
+        }
+
+        .qr-code-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; 
+            padding: 15px; 
+        }
+
+        .siga-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.85);
+            letter-spacing: 2px;
+        }
+
+        .social-apoie-wrapper {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .social-apoie-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* Propriedade border removida para evitar o bug de preenchimento */
+        }
+
+        .social-apoie-btn:hover {
+            transform: scale(1.15) translateY(-5px);
+            color: #ffffff;
+        }
+
+        /* Cores Harmonizadas do Instagram (Bug da borda corrigido) */
+        .btn-insta:hover {
+            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+            box-shadow: 0 0 30px rgba(214, 36, 159, 0.6);
+        }
+
+        /* Cores Harmonizadas do X/Twitter com Borda Interna (Inset) */
+        .btn-twitter:hover {
+            background: #000000;
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.2), 0 0 30px rgba(255, 255, 255, 0.3);
+        }
 
         /* --- Responsividade --- */
         @media (max-width: 900px) {
@@ -278,7 +558,6 @@
             .title { font-size: 2.2rem; }
             .slideshow-frame { width: 300px; height: 450px; }
             
-            /* Ajuste das setas no celular: retira a posição fixa e as coloca abaixo do Discord */
             .scroll-indicator-container {
                 position: relative;
                 bottom: auto;
@@ -295,6 +574,15 @@
                 80%, 95% { opacity: 0.4; transform: translate(-50%, -50%) translateX(50%) translateZ(-100px) scale(0.8); z-index: 5; }
                 100% { opacity: 1; transform: translate(-50%, -50%) translateX(0) translateZ(0) scale(1); z-index: 10; }
             }
+
+            .app-title { font-size: 3rem; }
+            .gif-box { width: 260px; }
+            .support-title { font-size: 2.2rem; }
+            
+            /* Ajustes Mobile da Secção Apoie */
+            .apoie-title { font-size: 1.6rem; }
+            .qr-code-box { width: 240px; height: 242px; }
+            .social-apoie-btn { width: 70px; height: 70px; font-size: 2.2rem; }
         }
     </style>
 </head>
@@ -303,51 +591,188 @@
     <div class="bg-deco-circle"></div>
 
     <nav class="navbar">
-        <a href="#" class="nav-link">Início</a>
-        <a href="#" class="nav-link">App</a>
-        <a href="#" class="nav-link">Suporte</a>
-        <a href="#" class="nav-link">Apoie</a>
+        <a href="#inicio" class="nav-link active" id="link-inicio">Início</a>
+        <a href="#app" class="nav-link" id="link-app">App</a>
+        <a href="#suporte" class="nav-link" id="link-suporte">Suporte</a>
+        <a href="#apoie" class="nav-link" id="link-apoie">Apoie</a>
     </nav>
 
-    <main class="main-container">
+    <section id="inicio" class="scroll-section">
+        <main class="main-container">
 
-        <div class="content-left">
-            <h1 class="title">Império Promoções</h1>
-            <p class="description">
-                Junte-se ao império, a melhor comunidade de promoções da internet. 
-                Encontre diversos tipos de promoções num só lugar: eletrodomésticos, 
-                hardware, roupas, perfumes, comida, bugs e muito mais. Tudo num apenas lugar.
+            <div class="content-left">
+                <h1 class="title">Império Promoções</h1>
+                <p class="description">
+                    Junte-se ao império, a melhor comunidade de promoções da internet. 
+                    Encontre diversos tipos de promoções num só lugar: eletrodomésticos, 
+                    hardware, roupas, perfumes, comida, bugs e muito mais. Tudo num apenas lugar.
+                </p>
+
+                <div class="social-buttons-container">
+                    <a href="https://chat.whatsapp.com/CqUieJXmsHJDIDOSsDUAIF?mode=hqrc" target="_blank" class="social-btn" aria-label="Grupo WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://discord.gg/75KDuYeDv2" target="_blank" class="social-btn" aria-label="Servidor Discord">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                    <a href="https://t.me/+biAlfCzWFsc1MGZh" target="_blank" class="social-btn" aria-label="Canal Telegram">
+                        <i class="fab fa-telegram-plane"></i>
+                    </a>
+                </div>
+
+                <div class="scroll-indicator-container">
+                    <i class="fas fa-chevron-down scroll-arrow arrow-top"></i>
+                    <i class="fas fa-chevron-down scroll-arrow arrow-bottom"></i>
+                </div>
+            </div>
+
+            <div class="content-right">
+                <div class="slideshow-frame">
+                    <img src="print1.png" class="carousel-item" alt="Promoção 1">
+                    <img src="print2.png" class="carousel-item" alt="Promoção 2">
+                    <img src="print3.png" class="carousel-item" alt="Promoção 3">
+                    <img src="print4.png" class="carousel-item" alt="Promoção 4">
+                    <img src="print5.png" class="carousel-item" alt="Promoção 5">
+                </div>
+            </div>
+
+        </main>
+    </section>
+
+    <section id="app" class="scroll-section">
+        <div class="app-container" id="app-content">
+            <h1 class="app-title">IMPÉRIO APP</h1>
+            <p class="app-description">
+                Com o surgimento de vários grupos de promoções, inclusive o nosso, surgiu a 
+                necessidade de filtrar produtos específicos que a gente realmente queira, sem precisar 
+                ficar vendo o histórico de mensagens de grupos. Foi aí que desenvolvemos o Império 
+                App, um aplicativo que além de filtrar os produtos que você deseja, dá pra filtrar os 
+                preços desejados também. Ele conta com uma interface simples e direta, facilitando a 
+                navegação.
+            </p>
+            
+            <div class="gifs-wrapper">
+                <div class="gif-box">
+                    <img src="gif01.gif" alt="Demonstração do App 1">
+                </div>
+                <div class="gif-box">
+                    <img src="gif02.gif" alt="Demonstração do App 2">
+                </div>
+            </div>
+
+            <div class="download-buttons-container">
+                <a href="https://www.mediafire.com/file/henboji95ap816q/ImperioBETA_v1.0.0%2B26.apk/file" class="download-btn btn-android" target="_blank">
+                    <i class="fab fa-android"></i>
+                    Android
+                </a>
+                <div class="download-btn btn-ios disabled">
+                    <i class="fab fa-apple"></i>
+                    Em breve
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="suporte" class="scroll-section">
+        <div class="support-container" id="support-content">
+            
+            <div class="support-image-wrapper">
+                <img src="suporte-header.png" alt="Império Suporte Header">
+            </div>
+
+            <h1 class="support-title">Precisa de ajuda?</h1>
+            <p class="app-description">
+                Se você tiver alguma dúvida sobre o aplicativo, sugestões ou problemas, entre no nosso servidor do Discord. Lá, você encontrará uma equipe dedicada pronta para te ajudar com qualquer questão.
             </p>
 
-            <div class="social-buttons-container">
-                <a href="https://chat.whatsapp.com/CqUieJXmsHJDIDOSsDUAIF?mode=hqrc" target="_blank" class="social-btn" aria-label="Grupo WhatsApp">
-                    <i class="fab fa-whatsapp"></i>
-                </a>
-                <a href="https://discord.gg/75KDuYeDv2" target="_blank" class="social-btn" aria-label="Servidor Discord">
-                    <i class="fab fa-discord"></i>
-                </a>
-                <a href="https://t.me/+biAlfCzWFsc1MGZh" target="_blank" class="social-btn" aria-label="Canal Telegram">
-                    <i class="fab fa-telegram-plane"></i>
-                </a>
-            </div>
+            <a href="SEU_LINK_DO_DISCORD_AQUI" target="_blank" class="download-btn btn-discord">
+                <i class="fab fa-discord"></i>
+                Discord
+            </a>
 
-            <div class="scroll-indicator-container">
-                <i class="fas fa-chevron-down scroll-arrow arrow-top"></i>
-                <i class="fas fa-chevron-down scroll-arrow arrow-bottom"></i>
-            </div>
         </div>
+    </section>
 
-        <div class="content-right">
-            <div class="slideshow-frame">
-                <img src="print1.png" class="carousel-item" alt="Promoção 1">
-                <img src="print2.png" class="carousel-item" alt="Promoção 2">
-                <img src="print3.png" class="carousel-item" alt="Promoção 3">
-                <img src="print4.png" class="carousel-item" alt="Promoção 4">
-                <img src="print5.png" class="carousel-item" alt="Promoção 5">
+    <section id="apoie" class="scroll-section">
+        <div class="apoie-container" id="apoie-content">
+            
+            <h2 class="apoie-title">Apoie nosso projeto com qualquer valor:</h2>
+            
+            <div class="qr-code-box">
+                <img src="qrcode.png" alt="QR Code PIX">
             </div>
+
+            <div class="siga-title">SIGA A GENTE:</div>
+
+            <div class="social-apoie-wrapper">
+                <a href="SEU_LINK_DO_INSTAGRAM" target="_blank" class="social-apoie-btn btn-insta" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="SEU_LINK_DO_TWITTER" target="_blank" class="social-apoie-btn btn-twitter" aria-label="Twitter">
+                    <i class="fab fa-x-twitter"></i>
+                </a>
+            </div>
+
         </div>
+    </section>
 
-    </main>
+    <script>
+        const mainContainer = document.querySelector('.main-container');
+        const appContent = document.getElementById('app-content');
+        const supportContent = document.getElementById('support-content');
+        const apoieContent = document.getElementById('apoie-content');
 
+        const linkInicio = document.getElementById('link-inicio');
+        const linkApp = document.getElementById('link-app');
+        const linkSuporte = document.getElementById('link-suporte');
+        const linkApoie = document.getElementById('link-apoie');
+        const allLinks = [linkInicio, linkApp, linkSuporte, linkApoie];
+
+        function activateLink(activeLink) {
+            allLinks.forEach(link => {
+                if(link) link.classList.remove('active');
+            });
+            if(activeLink) activeLink.classList.add('active');
+        }
+
+        // Efeito da primeira tela a desaparecer gradualmente
+        window.addEventListener('scroll', () => {
+            let scrollY = window.scrollY;
+            let vh = window.innerHeight;
+            let opacity = 1 - (scrollY / (vh * 0.5)); 
+            if(mainContainer) {
+                mainContainer.style.opacity = opacity > 0 ? opacity : 0;
+            }
+        });
+
+        // Efeito de seleção automática no menu e fade-in dos textos
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    if(entry.target.id === 'inicio') {
+                        activateLink(linkInicio);
+                    } 
+                    else if(entry.target.id === 'app') {
+                        appContent.classList.add('visible');
+                        activateLink(linkApp);
+                    }
+                    else if(entry.target.id === 'suporte') {
+                        supportContent.classList.add('visible');
+                        activateLink(linkSuporte);
+                    }
+                    else if(entry.target.id === 'apoie') {
+                        apoieContent.classList.add('visible');
+                        activateLink(linkApoie);
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        observer.observe(document.getElementById('inicio'));
+        observer.observe(document.getElementById('app'));
+        observer.observe(document.getElementById('suporte'));
+        observer.observe(document.getElementById('apoie'));
+    </script>
 </body>
 </html>
