@@ -634,7 +634,7 @@
                     </a>
                 </div>
 
-                <div class="scroll-indicator-container">
+                <div class="scroll-indicator-container" id="setas-scroll">
                     <i class="fas fa-chevron-down scroll-arrow arrow-top"></i>
                     <i class="fas fa-chevron-down scroll-arrow arrow-bottom"></i>
                 </div>
@@ -720,10 +720,10 @@
             <div class="siga-title">SIGA A GENTE:</div>
 
             <div class="social-apoie-wrapper">
-                <a href="https://instagram.com/SEU_USUARIO_AQUI" target="_blank" class="social-apoie-btn btn-insta" aria-label="Instagram">
+                <a href="https://www.instagram.com/imperiopromobr/" target="_blank" class="social-apoie-btn btn-insta" aria-label="Instagram">
                     <i class="fab fa-instagram"></i>
                 </a>
-                <a href="https://twitter.com/SEU_USUARIO_AQUI" target="_blank" class="social-apoie-btn btn-twitter" aria-label="Twitter">
+                <a href="https://x.com/imperiopromobr" target="_blank" class="social-apoie-btn btn-twitter" aria-label="Twitter">
                     <i class="fab fa-x-twitter"></i>
                 </a>
             </div>
@@ -785,27 +785,33 @@
 
         // Efeito de seleção automática no menu e fade-in dos textos
         // Reduzido o threshold para 0.1 para que a secção APP apareça no telemóvel sem problemas
+        const setasScroll = document.getElementById('setas-scroll');
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting) {
                     if(entry.target.id === 'inicio') {
                         activateLink(linkInicio);
+                        setasScroll.style.display = 'flex'; 
                     } 
                     else if(entry.target.id === 'app') {
                         appContent.classList.add('visible');
                         activateLink(linkApp);
+                        setasScroll.style.display = 'flex'; 
                     }
                     else if(entry.target.id === 'suporte') {
                         supportContent.classList.add('visible');
                         activateLink(linkSuporte);
+                        setasScroll.style.display = 'flex'; 
                     }
                     else if(entry.target.id === 'apoie') {
                         apoieContent.classList.add('visible');
                         activateLink(linkApoie);
+                        setasScroll.style.display = 'none'; 
                     }
                 }
             });
-        }, { threshold: 0.1 }); 
+        }, { threshold: 0.1 });
 
         observer.observe(document.getElementById('inicio'));
         observer.observe(document.getElementById('app'));
