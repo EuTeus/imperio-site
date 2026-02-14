@@ -27,7 +27,7 @@
         /* Configuração de Scroll Snap e Eixo Horizontal */
         html {
             overflow-x: hidden;
-            max-width: 100vw; /* Garante que não passa da tela */
+            max-width: 100vw;
             width: 100%;
             scroll-snap-type: y mandatory;
             scroll-behavior: smooth;
@@ -38,7 +38,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             position: relative;
-            overflow-x: hidden; /* Força o bloqueio horizontal absoluto */
+            overflow-x: hidden; /* Bloqueio rigoroso de rolagem horizontal */
             max-width: 100vw;
         }
 
@@ -108,6 +108,7 @@
             align-items: center;
             justify-content: center;
             padding-top: 50px; 
+            padding-bottom: 120px; /* Espaçamento global maior entre abas */
             position: relative;
         }
 
@@ -544,15 +545,15 @@
 
         /* --- Responsividade --- */
         @media (max-width: 900px) {
-            /* Desativa o scroll magnético no celular para permitir leitura livre de seções grandes */
+            /* Desativa o scroll magnético no telemóvel para permitir leitura livre e evitar os pulos */
             html {
                 scroll-snap-type: none;
             }
             .scroll-section {
                 scroll-snap-align: none;
                 min-height: auto; 
-                padding-top: 100px; 
-                padding-bottom: 50px;
+                padding-top: 130px; 
+                padding-bottom: 180px; /* Espaçamento gigante entre abas no telemóvel */
             }
 
             .bg-deco-circle {
@@ -759,7 +760,8 @@
             }
         });
 
-        // Efeito de seleção automática no menu (O threshold reduzido para 0.3 garante funcionamento suave no mobile)
+        // Efeito de seleção automática no menu e fade-in dos textos
+        // Reduzido o threshold para 0.1 para que a secção APP apareça no telemóvel sem problemas
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting) {
@@ -780,7 +782,7 @@
                     }
                 }
             });
-        }, { threshold: 0.3 });
+        }, { threshold: 0.1 }); 
 
         observer.observe(document.getElementById('inicio'));
         observer.observe(document.getElementById('app'));
