@@ -754,9 +754,19 @@
         window.addEventListener('scroll', () => {
             let scrollY = window.scrollY;
             let vh = window.innerHeight;
-            let opacity = 1 - (scrollY / (vh * 0.5)); 
-            if(mainContainer) {
-                mainContainer.style.opacity = opacity > 0 ? opacity : 0;
+            
+            // Verifica se está no computador (tela maior que 900px)
+            if (window.innerWidth > 900) {
+                // Efeito original: a tela vai sumindo aos poucos
+                let opacity = 1 - (scrollY / (vh * 0.5)); 
+                if(mainContainer) {
+                    mainContainer.style.opacity = opacity > 0 ? opacity : 0;
+                }
+            } else {
+                // No celular: a opacidade fica travada em 100% para você ler até o fim
+                if(mainContainer) {
+                    mainContainer.style.opacity = 1;
+                }
             }
         });
 
