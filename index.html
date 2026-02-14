@@ -27,6 +27,7 @@
         /* Configuração de Scroll Snap e Eixo Horizontal */
         html {
             overflow-x: hidden;
+            max-width: 100vw; /* Garante que não passa da tela */
             width: 100%;
             scroll-snap-type: y mandatory;
             scroll-behavior: smooth;
@@ -37,6 +38,8 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             position: relative;
+            overflow-x: hidden; /* Força o bloqueio horizontal absoluto */
+            max-width: 100vw;
         }
 
         /* --- ELEMENTOS DE FUNDO --- */
@@ -520,7 +523,6 @@
             color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            /* Propriedade border removida para evitar o bug de preenchimento */
         }
 
         .social-apoie-btn:hover {
@@ -528,13 +530,13 @@
             color: #ffffff;
         }
 
-        /* Cores Harmonizadas do Instagram (Bug da borda corrigido) */
+        /* Cores Harmonizadas do Instagram */
         .btn-insta:hover {
             background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
             box-shadow: 0 0 30px rgba(214, 36, 159, 0.6);
         }
 
-        /* Cores Harmonizadas do X/Twitter com Borda Interna (Inset) */
+        /* Cores Harmonizadas do X/Twitter */
         .btn-twitter:hover {
             background: #000000;
             box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.2), 0 0 30px rgba(255, 255, 255, 0.3);
@@ -542,6 +544,17 @@
 
         /* --- Responsividade --- */
         @media (max-width: 900px) {
+            /* Desativa o scroll magnético no celular para permitir leitura livre de seções grandes */
+            html {
+                scroll-snap-type: none;
+            }
+            .scroll-section {
+                scroll-snap-align: none;
+                min-height: auto; 
+                padding-top: 100px; 
+                padding-bottom: 50px;
+            }
+
             .bg-deco-circle {
                 width: 300px; height: 300px;
                 bottom: -100px; right: -100px;
@@ -604,8 +617,8 @@
                 <h1 class="title">Império Promoções</h1>
                 <p class="description">
                     Junte-se ao império, a melhor comunidade de promoções da internet. 
-                    Encontre diversos tipos de promoções em um só lugar, como: eletrodomésticos, 
-                    hardware, roupas, perfumes, comida, bugs e muito mais. Tudo em um único lugar. Entre agora:
+                    Encontre diversos tipos de promoções num só lugar: eletrodomésticos, 
+                    hardware, roupas, perfumes, comida, bugs e muito mais. Tudo num apenas lugar.
                 </p>
 
                 <div class="social-buttons-container">
@@ -706,10 +719,10 @@
             <div class="siga-title">SIGA A GENTE:</div>
 
             <div class="social-apoie-wrapper">
-                <a href="https://www.instagram.com/imperiopromobr/" target="_blank" class="social-apoie-btn btn-insta" aria-label="Instagram">
+                <a href="https://instagram.com/SEU_USUARIO_AQUI" target="_blank" class="social-apoie-btn btn-insta" aria-label="Instagram">
                     <i class="fab fa-instagram"></i>
                 </a>
-                <a href="https://x.com/imperiopromobr" target="_blank" class="social-apoie-btn btn-twitter" aria-label="Twitter">
+                <a href="https://twitter.com/SEU_USUARIO_AQUI" target="_blank" class="social-apoie-btn btn-twitter" aria-label="Twitter">
                     <i class="fab fa-x-twitter"></i>
                 </a>
             </div>
@@ -746,7 +759,7 @@
             }
         });
 
-        // Efeito de seleção automática no menu e fade-in dos textos
+        // Efeito de seleção automática no menu (O threshold reduzido para 0.3 garante funcionamento suave no mobile)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting) {
@@ -767,7 +780,7 @@
                     }
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: 0.3 });
 
         observer.observe(document.getElementById('inicio'));
         observer.observe(document.getElementById('app'));
