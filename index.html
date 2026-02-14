@@ -750,23 +750,36 @@
             if(activeLink) activeLink.classList.add('active');
         }
 
-        // Efeito da primeira tela a desaparecer gradualmente
+        // Pega todas as seções para aplicar o efeito em todas
+        const todasAsSecoes = document.querySelectorAll('.scroll-section');
+
+        // Efeito de desaparecer gradualmente 
         window.addEventListener('scroll', () => {
-            let scrollY = window.scrollY;
             let vh = window.innerHeight;
             
-            // Verifica se está no computador (tela maior que 900px)
             if (window.innerWidth > 900) {
-                // Efeito original: a tela vai sumindo aos poucos
-                let opacity = 1 - (scrollY / (vh * 0.5)); 
-                if(mainContainer) {
-                    mainContainer.style.opacity = opacity > 0 ? opacity : 0;
-                }
+                todasAsSecoes.forEach(secao => {
+                    const rect = secao.getBoundingClientRect();
+                    const container = secao.firstElementChild; 
+                    
+                    if (container) {
+
+                        if (rect.top <= 0 && rect.bottom >= 0) {
+                            let opacity = 1 - (Math.abs(rect.top) / (vh * 0.5)); 
+                            container.style.opacity = opacity > 0 ? opacity : 0;
+                        } 
+                        else {
+                            container.style.opacity = '';
+                        }
+                    }
+                });
             } else {
-                // No celular: a opacidade fica travada em 100% para você ler até o fim
-                if(mainContainer) {
-                    mainContainer.style.opacity = 1;
-                }
+                todasAsSecoes.forEach(secao => {
+                    const container = secao.firstElementChild;
+                    if (container) {
+                        container.style.opacity = '';
+                    }
+                });
             }
         });
 
